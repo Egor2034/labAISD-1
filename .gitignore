@@ -39,3 +39,38 @@
 
 # debug information files
 *.dwo
+
+# CMake build directories
+build/
+cmake-build-*/
+CMakeCache.txt
+CMakeFiles/
+CTestTestfile.cmake
+Makefile
+cmake_install.cmake
+install_manifest.txt
+
+# Visual Studio specific files (if using Visual Studio with CMake)
+*.vcxproj*
+*.sln
+*.suo
+*.user
+.vs/
+
+# Other common build artifacts
+*.o
+*.obj
+*.lo
+*.la
+*.so
+*.a
+*.lib
+*.dll
+*.exe
+*.out
+*.bin
+*.log
+*.tmp
+
+# IDE specific files (e.g., CLion)
+.idea/
