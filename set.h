@@ -134,11 +134,13 @@ public:
     }
 
     void add(const T& el) {
+        if (contains(el)) return;
+
         if (_count + 1 > _capacity) {
             reserve(_capacity * 2 + 1);
         }
 
-        if (!contains(el)) _data[_count++] = el;
+        _data[_count++] = el;
     }
 
     void reserve(size_t new_capacity) {
@@ -164,10 +166,10 @@ public:
     size_t get_count() const { return _count; }
     size_t get_capacity() const { return _capacity; }
 
-    //T* begin();
-    //const T* begin() const;
-    //T* end() const;
-    //const T* end() const;
+    T* begin() { return _data; }
+    T* end() { return (_data + _count); }
+    const T* begin() const { return _data; }
+    const T* end() const { return (_data + _count); }
 private:
     size_t _count;
     size_t _capacity;
