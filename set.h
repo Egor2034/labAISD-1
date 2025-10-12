@@ -157,8 +157,8 @@ public:
 
     void clear() {
         _count = 0;
-        delete[] data;
-        data = nullptr;
+        delete[] _data;
+        _data = nullptr;
     }
 
     size_t get_count() const { return _count; }
