@@ -9,11 +9,7 @@
 template<typename T> requires std::equality_comparable<T>
 class Set {
 public:
-    Set() {
-        _data(nullptr); 
-        _count = 0; 
-        _capacity = 0;
-    }
+    Set() : _data(nullptr), _count(0), _capacity(0) {}
 
     Set(size_t capacity) {
         _count = 0;
@@ -21,15 +17,9 @@ public:
         _data = new T[_capacity];
     }
 
-    Set(const T* arr, size_t size) {
-        _capacity = size;
-        _data = new T[size];
-
+    Set(const T* arr, size_t size) : _capacity(size), _data(new T[size]) {
         for (size_t i = 0; i < size; i++) {
-            if (!contains(arr[i])) { 
-                _count++;
-                _data[i] = arr[i]; 
-            }
+            add(arr[i]);
         }
     }
 
@@ -43,7 +33,7 @@ public:
         if (count == 0) {
             _count = 0;
             _capacity = 0;
-            _data = nullptr;
+            _data = nullptr; 
             return;
         }
 
@@ -158,9 +148,9 @@ public:
     }
 
     void clear() {
-        _count = 0;
         delete[] _data;
         _data = nullptr;
+        _count = 0;
     }
 
     size_t get_count() const { return _count; }
@@ -175,17 +165,18 @@ private:
     size_t _capacity;
     T* _data;
 
-    inline static const double EPSILON = 1e-6  ;
-
-    friend std::ostream& operator<<(std::ostream& os, const Set<T>& set) {
-        for (size_t i = 0; i < set._count; i++) {
-            os << set._data[i] << "\n";
-        }
-        return os;
-    }
+    inline static const double EPSILON = 1e-6;
 
     friend Set<T> intersection(const Set<T>& first, const Set<T>& second);
 };
+
+template <typename T>
+std::ostream& operator<<(std::ostream& os, const Set<T>& set) {
+    for (const T& val : set) {
+        os << val << "\n";
+    }
+    return os;
+}
 
 template <typename T>
 void swap(Set<T>& first, Set<T>& second) {}
