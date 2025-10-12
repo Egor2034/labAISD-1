@@ -43,6 +43,8 @@
         "ostream": "cpp",
         "stdexcept": "cpp",
         "streambuf": "cpp",
-        "typeinfo": "cpp"
-    }
+        "typeinfo": "cpp",
+        "xmemory": "cpp"
+    },
+    "C_Cpp.default.cppStandard": "c++20"
 }
