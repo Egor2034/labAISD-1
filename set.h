@@ -5,9 +5,7 @@
 #include <algorithm>
 #include <stdexcept>
 #include <random>
-/*
-ДОБАВИТЬ ФУНКЦИЮ SWAP
-*/
+
 template<typename T> requires std::equality_comparable<T>
 class Set {
 public:
@@ -96,8 +94,16 @@ public:
         }
     }
 
-    Set(const Set<T>& other);
-    Set(const Set<T>&& other);
+    Set(const Set<T>& other) {
+        _count = other._count;
+        _capacity = other._capacity;
+        _data = new T[_capacity];
+
+        for (size_t i = 0; i < _count; i++) {
+            _data[i] = other._data[i];
+        }
+    }
+
     ~Set() { delete[] _data; }
 
     Set<T>& operator=(const Set<T>& other);
