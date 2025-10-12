@@ -104,7 +104,7 @@ public:
         }
     }
 
-    ~Set() { delete[] _data; }
+    ~Set() { clear(); }
 
     Set<T>& operator=(const Set<T>& other);
 
@@ -133,10 +133,36 @@ public:
         return false;
     }
 
-    void add(const T& el);
-    void clear();
-    size_t get_size() const;
-    size_t get_capacity() const;
+    void add(const T& el) {
+        if (_count + 1 > _capacity) {
+            reserve(_capacity * 2 + 1);
+        }
+
+        if (!contains(el)) _data[_count++] = el;
+    }
+
+    void reserve(size_t new_capacity) {
+        if (new_capacity <= _capacity) return;
+
+        T* new_data = new T[new_capacity];
+
+        for (size_t i = 0; i < _count; i++) {
+            new_data[i] = _data[i];
+        }
+
+        delete[] _data;
+        _capacity = new_capacity;
+        _data = new_data;
+    }
+
+    void clear() {
+        _count = 0;
+        delete[] data;
+        data = nullptr;
+    }
+
+    size_t get_count() const { return _count; }
+    size_t get_capacity() const { return _capacity; }
 
     //T* begin();
     //const T* begin() const;
