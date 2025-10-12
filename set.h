@@ -96,11 +96,12 @@ public:
 
     ~Set() { clear(); }
 
+    const T& operator[](size_t index) const {
+        if (index >= _count) { throw std::out_of_range("Out of range"); }
+        return _data[index];
+    }
+
     Set<T>& operator=(const Set<T>& other);
-
-    T& operator[](size_t index);
-    const T& operator[](size_t index) const;
-
     Set<T> operator+(const Set<T>& other) const;
     Set<T>& operator+=(const Set<T>& other);
     Set<T> operator-(const Set<T>& other) const;
@@ -166,8 +167,6 @@ private:
     T* _data;
 
     inline static const double EPSILON = 1e-6;
-
-    friend Set<T> intersection(const Set<T>& first, const Set<T>& second);
 };
 
 template <typename T>
@@ -176,6 +175,19 @@ std::ostream& operator<<(std::ostream& os, const Set<T>& set) {
         os << val << "\n";
     }
     return os;
+}
+
+template <typename T>
+Set<T> intersection(const Set<T>& first, const Set<T>& second) {
+    if (first.get_count() == 0 || second.get_count() == 0) { return Set<T>(); }
+
+    Set<T> result;
+
+    for (const T& el : first) {
+        if (second.contains(el)) { result.add(el); }
+    }
+
+    return result;
 }
 
 template <typename T>
