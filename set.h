@@ -262,6 +262,12 @@ private:
     inline static const double EPSILON = 1e-6;
 };
 
+template <typename F, typename S>
+std::ostream& operator<<(std::ostream& os, const std::pair<F, S>& p) {
+    os << "{ " << p.first << ", " << p.second << " }";
+    return os;
+}
+
 template <typename T>
 std::ostream& operator<<(std::ostream& os, const Set<T>& set) {
     for (const T& val : set) {
