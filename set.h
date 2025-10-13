@@ -101,37 +101,130 @@ public:
         return _data[index];
     }
 
-    Set<T>& operator=(const Set<T>& other);
-    Set<T> operator+(const Set<T>& other) const;
-    Set<T>& operator+=(const Set<T>& other);
-    Set<T> operator-(const Set<T>& other) const;
-    Set<T>& operator-=(const Set<T>& other);
+    Set<T>& operator=(const Set<T>& other) {
+        if (*this != other) {
+            delete[] _data;
+            _data = new T[other._count];
+            _count = other._count;
+            _capacity = other._capacity;
+
+            for (size_t i = 0; i < _count; i++) {
+                _data[i] = other._data[i];
+            }
+        }
+
+        return *this;
+    }
+
+    Set<T> operator+(const Set<T>& other) const { 
+        Set<T> temp(*this);
+
+        for (const T& el : other) { temp.add(el); }
+
+        return temp;
+    }
+
+    Set<T>& operator+=(const Set<T>& other) {   
+        for (const T& el : other) { add(el); }
+
+        return *this;
+    }
+
+    Set<T> operator-(const Set<T>& other) const {
+        Set<T> temp(*this);
+
+        for (const T& el : other) { 
+            if (temp._count == 0) { break; }
+            temp.remove(el); 
+        }
+
+        return temp;
+    }
+
+    Set<T>& operator-=(const Set<T>& other) {
+        for (const T& el : other) {
+            if (_count == 0) { break; }
+            remove(el);
+        }
+
+        return *this;
+    }
+
+    bool operator==(const Set<T>& other) const {
+        if (_count != other.get_count()) { return false; }
+        
+        for (const T& el : *this) {
+            if (!other.contains(el)) { return false; }
+        }
+
+        return true;
+    }
+
+    bool operator!=(const Set<T>& other) const {
+        return !(*this == other);
+    }
 
     /*Операторы для работы с элементом типа T*/
-    Set<T> operator+(const T& el) const;
-    Set<T>& operator+=(const T& el);
-    Set<T> operator-(const T& el) const;
-    Set<T>& operator-=(const T& el);
+    Set<T> operator+(const T& el) const {
+        Set<T> temp(*this);
+        temp.add(el);
+        return temp;
+    }
 
-    bool operator==(const Set<T>& other) const;
-    bool operator!=(const Set<T>& other) const;
+    Set<T>& operator+=(const T& el) {
+        add(el);
+        return *this;
+    }
+
+    Set<T> operator-(const T& el) const {
+        Set<T> temp(*this);
+        temp.remove(el);
+        return temp;
+    }
+
+    Set<T>& operator-=(const T& el) {
+        remove(el);
+        return *this;
+    }
 
     bool contains(const T& el) const {
         for (size_t i = 0; i < _count; i++) {
-            if (_data[i] == el) return true;
+            if (_data[i] == el) { return true; }
+        }
+
+        return false;
+    }
+
+    bool contains(const T& el) const requires std::floating_point<T> {
+        for (size_t i = 0; i < _count; i++) {
+            if ((_data[i] - el) <= EPSILON) { return true; }
         }
 
         return false;
     }
 
     void add(const T& el) {
-        if (contains(el)) return;
+        if (contains(el)) { return; }
 
         if (_count + 1 > _capacity) {
             reserve(_capacity * 2 + 1);
         }
 
         _data[_count++] = el;
+    }
+
+    void remove(const T& el) {
+        if (!contains(el)) { return; }
+
+        for (size_t i = 0; i < _count; i++) {
+            if (_data[i] == el) {
+                for (size_t j = i; j < _count - 1; j++) {
+                    _data[j] = _data[j + 1];
+                }
+                _count--;
+                break;
+            }
+        }
     }
 
     void reserve(size_t new_capacity) {
@@ -191,7 +284,11 @@ Set<T> intersection(const Set<T>& first, const Set<T>& second) {
 }
 
 template <typename T>
-void swap(Set<T>& first, Set<T>& second) {}
+void swap(Set<T>& first, Set<T>& second) {
+    Set<T> temp(first);
+    first = second;
+    second = temp;
+}
 
 template <typename T>
 void swap(T& first, T& second) {
