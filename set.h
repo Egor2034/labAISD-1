@@ -102,7 +102,7 @@ public:
     }
 
     Set<T>& operator=(const Set<T>& other) {
-        if (*this != other) {
+        if (this != &other) {
             delete[] _data;
             _data = new T[other._count];
             _count = other._count;
@@ -197,7 +197,7 @@ public:
 
     bool contains(const T& el) const requires std::floating_point<T> {
         for (size_t i = 0; i < _count; i++) {
-            if ((_data[i] - el) <= EPSILON) { return true; }
+            if (std::fabs(_data[i] - el) <= EPSILON) { return true; }
         }
 
         return false;
