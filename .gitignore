@@ -74,4 +74,4 @@ install_manifest.txt
 
 # IDE specific files (e.g., CLion)
 .idea/
-.vscode
+.vscode/
